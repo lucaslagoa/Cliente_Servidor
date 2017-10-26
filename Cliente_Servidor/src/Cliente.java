@@ -41,7 +41,7 @@ public class Cliente {
 			 * veja que a requisição termina com \r\n que equivale a <CR><LF>
 			 * para encerar a requisição tem uma linha em branco
 			 */
-			String requisicao = "" + "GET /~fls/redes/tp1.txt HTTP/1.1\r\n" + "Host: www.dcomp.ufsj.edu.br\r\n" + "\r\n";
+			String requisicao = "GET /~fls/redes/tp1.txt HTTP/1.1\r\n" + "Host: www.dcomp.ufsj.edu.br\r\n" + "\r\n";
 			// OutputStream para enviar a requisição
 			//PrintStream envioServ = new PrintStream(socket.getOutputStream());
 
@@ -51,7 +51,7 @@ public class Cliente {
 			
 			// escreve o vetor de bytes no "recurso" de envio
 			envioServ.write(b);
-			System.out.println(envioServ);
+			//System.out.println(envioServ);
 			// marca a finalização da escrita
 			envioServ.flush();
 			

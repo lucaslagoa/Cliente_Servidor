@@ -10,13 +10,15 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class Servidor implements Runnable {
 
 	static ObjectOutputStream saida;
 	static OutputStream os;
-	static int porta = 12354;
+	static int porta = 8087;
 	static String navegador;
 	static String url;
 	static String door;
@@ -88,8 +90,12 @@ public class Servidor implements Runnable {
 
 		String nomeArquivo = "/home/lucas/workspace/Servidor/src/" + url;
 		
-
 		File file = new File(nomeArquivo);
+		
+		
+		String mime = Files.probeContentType(file.toPath());
+		System.out.println("Content Type: " + mime);
+
 //		saida.write("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 0\r\n\r\n".getBytes("ASCII"));
 //		saida.flush();
 //		os.write(new String("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n").getBytes());
@@ -98,7 +104,10 @@ public class Servidor implements Runnable {
 		
 		if (file.exists()) {
 			OutputStream stream = servidor.getOutputStream();
-			stream.write("HTTP/1.1 200 OK\r\nContent-Type: application/pdf\r\n".getBytes());
+			
+			String send = "HTTP/1.1 200 OK\r\nContent-Type: "+mime+"\r\n";
+			stream.write(send.getBytes(Charset.forName("UTF-8")));
+			//stream.write("HTTP/1.1 200 OK\r\nContent-Type: "+mime+"\r\n".getBytes());
 //			responseWriter.write(msg);
 //			saida.flush();
 
@@ -149,4 +158,6 @@ public class Servidor implements Runnable {
 		}
 
 	}
+
+	
 }
