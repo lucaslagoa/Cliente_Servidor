@@ -18,7 +18,7 @@ public class Servidor implements Runnable {
 
 	static ObjectOutputStream saida;
 	static OutputStream os;
-	static int porta = 8087;
+	static int porta = 8084;
 	static String navegador;
 	static String url;
 	static String door;
@@ -90,10 +90,30 @@ public class Servidor implements Runnable {
 
 		File file = new File(nomeArquivo);
 
-		String mime = Files.probeContentType(file.toPath());
-		System.out.println("Content Type: " + mime);
+		if(file.isDirectory()){
+	          
+			OutputStream stream = servidor.getOutputStream();
 
-		if (file.exists()) {
+	            String arquivos[] = file.list();  
+	            String mensagem = "Os arquivos do diretório local são: ";
+	            stream.write(mensagem.getBytes(Charset.forName("UTF-8")));
+	            
+	            String espaco = "\n";
+	            for(int i = 0; i < arquivos.length; i++){ 
+	              
+	              System.out.println(arquivos[i]);
+	              stream.write(espaco.getBytes(Charset.forName("UTF-8")));
+	              stream.write(arquivos[i].getBytes(Charset.forName("UTF-8")));
+	              stream.write(espaco.getBytes(Charset.forName("UTF-8")));
+
+	            }  
+	            stream.flush();
+	    }
+		
+		else if (file.exists()) {
+			
+			String mime = Files.probeContentType(file.toPath());
+			System.out.println("Content Type: " + mime);
 			OutputStream stream = servidor.getOutputStream();
 
 			String send = "HTTP/1.1 200 OK\r\nContent-Type: " + mime + "\r\n";
@@ -130,7 +150,10 @@ public class Servidor implements Runnable {
 			fis.close();
 			bis.close();
 
-		} else {
+		}
+			
+		
+		else {
 			responseWriter.write(
 					OUTPUT_HEADERS_NOT_FOUND + OUTPUT_NOT_FOUND.length() + OUTPUT_END_OF_HEADERS + OUTPUT_NOT_FOUND);
 		}
