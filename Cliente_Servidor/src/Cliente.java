@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Cliente {
@@ -33,7 +34,7 @@ public class Cliente {
 			System.out.println("O ESPACO EM BRANCO");
 		}
 		String novourl = url.replace("http://", "").replace("https://", "");
-		
+
 		String[] vetor = novourl.split("/");
 		String caminho = "";
 		String extArquivo = null;
@@ -45,7 +46,7 @@ public class Cliente {
 		caminho = "/" + caminho;
 		caminho = caminho.substring(0, caminho.length() - 1);
 		extArquivo = (caminho.substring(caminho.lastIndexOf("/") + 1));
-		if(extArquivo.length() == 0){
+		if (extArquivo.length() == 0) {
 			extArquivo = "index";
 		}
 		int porta = Integer.parseInt(door);
@@ -72,20 +73,32 @@ public class Cliente {
 			sc = new Scanner(socket.getInputStream());
 			arquivo = new FileWriter(new File(extArquivo));
 
+			ArrayList<String> content = new ArrayList<>();
+
 			while (sc.hasNext()) {
 				String line = sc.nextLine();
 				System.out.println(line);
-				arquivo.write(line);
-				arquivo.write("\n");
-
+				content.add(line);
 			}
+
+			int start_pos = 0;
+			for (int i = 0; i < content.size(); i++) {
+				if (content.get(i).contains("Content-Type")) {
+					start_pos = i + 2;
+					break;
+
+				}
+			}
+
+			for (int i = start_pos; i < content.size(); i++) {
+				arquivo.write(content.get(i));
+				arquivo.write("\n");
+			}
+
 			arquivo.flush();
 			arquivo.close();
 		}
 
 	}
-	
-
- 
 
 }
