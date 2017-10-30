@@ -1,3 +1,15 @@
 Trabalho desenvolvido por Lucas Lagôa Nogueira - Redes
 
 Cliente - Servidor 
+
+Instruções para o navegador:
+
+url + porta 80 - https://www.dcomp.ufsj.edu.br/~fls/redes/tp1.txt 80
+
+obs: para baixar algum caminho que não seja um arquivo final, usar a barra no final
+ex: https://www.dcomp.ufsj.edu.br/~fls/redes/
+
+Instruções para o servidor:
+
+caminho + porta 8080 - /home/lucas/workspace/Servidor/src/ 8080
+
