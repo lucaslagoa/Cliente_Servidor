@@ -18,14 +18,17 @@ public class Servidor implements Runnable {
 
 	static ObjectOutputStream saida;
 	static OutputStream os;
-	static int porta = 8084;
+	static int porta;
 	static String navegador;
 	static String url;
 	static String door;
+	static String caminho;
+	static String path;
 	static PrintStream mensagem;
 	static Socket servidor;
 	static ServerSocket sservidor;
 	static BufferedWriter responseWriter;
+	static Scanner c;
 
 	private static final String OUTPUT_NOT_FOUND = "<html><head><title>Not Found</title></head><body><p>Resource Not Found!!</p></body></html>";
 	private static final String OUTPUT_HEADERS_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n" + "Content-Type: text/html\r\n"
@@ -37,7 +40,21 @@ public class Servidor implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-
+		System.out.println("Bem vindo ao servidor!\nDigite o caminho e a porta a ser usada!");
+		System.out.println("servidor>");
+		c = new Scanner(System.in);
+		String caminho = c.nextLine();
+		String[] parts = caminho.split(" ");
+		if (parts.length == 2) {
+			path = parts[0];
+			porta = Integer.parseInt(parts[1]);
+			
+		} else if (parts.length == 1) {
+			path = parts[0];
+			porta = 8080;
+		} else {
+			System.out.println("Você digitou errado!");
+		}
 		sservidor = new ServerSocket(porta);
 		System.out.println("Servidor está rodando na porta - " + porta + "\n");
 
@@ -70,7 +87,7 @@ public class Servidor implements Runnable {
 					url = parts[1];
 					door = "8080";
 				} else {
-					System.out.println("O ESPACO EM BRANCO");
+					System.out.println("Você digitou errado!");
 				}
 				break;
 			}
@@ -79,15 +96,13 @@ public class Servidor implements Runnable {
 			responseWriter.close();
 			servidor.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	static public void GET() throws IOException, ClassNotFoundException {
 
-		String nomeArquivo = "/home/lucas/workspace/Servidor/src/" + url;
-
+		String nomeArquivo = path + url;
 		File file = new File(nomeArquivo);
 
 		if(file.isDirectory()){
@@ -130,7 +145,6 @@ public class Servidor implements Runnable {
 			long tam = file.length();
 			int valor = 0;
 			byte[] contents;
-			int i = 0;
 			while (tam > 0) {
 
 				if (tam >= 1) {

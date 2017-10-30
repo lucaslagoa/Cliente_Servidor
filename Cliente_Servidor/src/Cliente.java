@@ -17,8 +17,8 @@ public class Cliente {
 	static String requisicao;
 
 	public static void main(String[] args) throws IOException {
-		System.out.println(
-				"Bem vindo ao navegador: digite a url desejada e a porta logo em seguida.\nCASO VOCE QUEIRA ACESSAR UM DIREOT");
+		System.out.println("Bem vindo ao navegador: digite a url desejada e a porta logo em seguida.\n"
+				+ "Caso você queira acessar alguma página como caminho, lembre-se de digitar / no final");
 		System.out.println("navegador>");
 		s = new Scanner(System.in);
 		String re = s.nextLine();
@@ -31,24 +31,26 @@ public class Cliente {
 			url = parts[0];
 			door = "80";
 		} else {
-			System.out.println("O ESPACO EM BRANCO");
+			System.out.println("Você digitou errado!");
 		}
+		
 		String novourl = url.replace("http://", "").replace("https://", "");
-
 		String[] vetor = novourl.split("/");
 		String caminho = "";
 		String extArquivo = null;
+		
 		for (int i = vetor.length - 1; i > 0; i--) {
 			caminho = vetor[i].concat("/" + caminho);
 		}
 
-		// www.dcomp.ufsj.edu.br/~fls/redes/tp1.txt
 		caminho = "/" + caminho;
 		caminho = caminho.substring(0, caminho.length() - 1);
 		extArquivo = (caminho.substring(caminho.lastIndexOf("/") + 1));
+		
 		if (extArquivo.length() == 0) {
 			extArquivo = "index";
 		}
+		
 		int porta = Integer.parseInt(door);
 		socket = new Socket(vetor[0], porta);
 
